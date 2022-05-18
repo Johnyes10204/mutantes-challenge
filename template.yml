@@ -32,26 +32,21 @@ Resources:
   # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
 
   # This is a Lambda function config associated with the source code: get-all-items.js
-  getAllItemsFunction:
+  Authenticate:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
-      Handler: src/mutantes/index.handler
+      CodeUri: src/mutantes
+      Handler: index.handler
       Runtime: nodejs14.x
       MemorySize: 128
       Timeout: 60
-      Description: A simple example includes a HTTP get method to get all items from a DynamoDB table.
+      Description: This Lambda Function allows to get mutants.
       Policies:
-        # Give Create/Read/Update/Delete Permissions to the SampleTable
-        - DynamoDBCrudPolicy:
-            TableName: !Ref SampleTable
-      Environment:
-        Variables:
-          # Make table name accessible as environment variable from function code during execution
-          SAMPLE_TABLE: !Ref SampleTable
+        # Give Lambda basic execution Permission to the helloFromLambda
+        - AWSLambdaBasicExecutionRole
       Events:
         Api:
           Type: Api
           Properties:
-            Path: /
-            Method: GET
+            Path: /authenticate
+            Method: POST
