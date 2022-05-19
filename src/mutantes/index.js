@@ -103,7 +103,8 @@ exports.handler = async (event) => {
         })
         matriz = [];
         var resdata = (countdna > 1 ? 200 : 403)
-        query.insertDna(dna, resdata);        
+        const res = query.insertDna(dna, resdata);     
+        return res
     }catch(err){
         const response = {
             statusCode: err.statusCode ? err.statusCode : 500,

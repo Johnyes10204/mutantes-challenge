@@ -31,11 +31,11 @@ Parameters:
 
   PASSWORD:
     Type: String
-    Default: HS256
+    Default: mutantes123456
 
   HOST:
     Type: String
-    Default: mutantes.cjel6cdq3euz.us-west-1.rds.amazonaws.com
+    Default: mutantesdb.cq7r6oqzz8nq.us-east-1.rds.amazonaws.com
 
   DB:
     Type: String
@@ -87,3 +87,30 @@ Resources:
           Properties:
             Path: /mutant
             Method: POST
+
+  Stats:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/stats
+      Handler: index.statsHandler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 60
+      Description: This Lambda Function allows to get mutants.
+      Policies:
+        # Give Lambda basic execution Permission to the helloFromLambda
+        - AWSLambdaBasicExecutionRole
+      Layers:
+        - !Ref LambdaFunctionLayer
+      Environment:
+        Variables:
+          USER: !Ref USER
+          PASSWORD: !Ref PASSWORD
+          HOST: !Ref HOST
+          DB: !Ref DB
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /stats
+            Method: GET
