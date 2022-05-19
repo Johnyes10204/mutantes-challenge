@@ -22,7 +22,7 @@ const con = mysql.createConnection({
     })
 }*/
 
-const insertDna = (dna, result, res) => {
+const insertDna = (dna, result) => {
     con.query(`select count(*) as countdna from dna where dna = '${dna}'`, (_erc, count) => {
         var dnas = count[0].countdna
         if (dnas == 0) {

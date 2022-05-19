@@ -53,7 +53,7 @@ Resources:
     Properties:
       LayerName: mutants-dependencies
       Description: Dependencies for HealthEnviron Lambda Functions.
-      ContentUri: src/dependencias/
+      ContentUri: src/dependencies/
       CompatibleRuntimes:
         - nodejs12.x
         - nodejs14.x
