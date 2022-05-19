@@ -25,6 +25,22 @@ Parameters:
   AppId:
     Type: String
 
+  USER:
+    Type: String
+    Default: admin
+
+  PASSWORD:
+    Type: String
+    Default: HS256
+
+  HOST:
+    Type: String
+    Default: mutantes.cjel6cdq3euz.us-west-1.rds.amazonaws.com
+
+  DB:
+    Type: String
+    Default: mutantes
+
 # Resources declares the AWS resources that you want to include in the stack
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
 Resources:
@@ -44,6 +60,12 @@ Resources:
       Policies:
         # Give Lambda basic execution Permission to the helloFromLambda
         - AWSLambdaBasicExecutionRole
+      Environment:
+        Variables:
+          USER: !Ref USER
+          PASSWORD: !Ref PASSWORD
+          HOST: !Ref HOST
+          DB: !Ref DB
       Events:
         Api:
           Type: Api
