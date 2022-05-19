@@ -48,5 +48,5 @@ Resources:
         Api:
           Type: Api
           Properties:
-            Path: /authenticate
+            Path: /mutantes
             Method: POST
