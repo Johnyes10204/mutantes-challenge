@@ -87,28 +87,3 @@ Resources:
           Properties:
             Path: /mutant
             Method: POST
-
-  Stats:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: src/stats
-      Handler: index.statsHandler
-      Runtime: nodejs14.x
-      MemorySize: 128
-      Timeout: 60
-      Description: This Lambda Function allows to get stats mutants.
-      Policies:
-        # Give Lambda basic execution Permission to the helloFromLambda
-        - AWSLambdaBasicExecutionRole
-      Environment:
-        Variables:
-          USER: !Ref USER
-          PASSWORD: !Ref PASSWORD
-          HOST: !Ref HOST
-          DB: !Ref DB
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            Path: /mutant
-            Method: POST
