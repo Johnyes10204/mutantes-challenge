@@ -11,15 +11,15 @@ const credential = {
 exports.statsHandler = async (event) => {
     var response = []
     const pool = await mariadb.createConnection(credential);
-    const rows= await pool.query('select tipodna , count(*) count from dna group by tipodna');
-    
+    const rows= await pool.query('select tipodna , count(*) count from mutantes.dna group by tipodna');
     rows.map(e => {
-        var pushar = (e.tipodna == 200 ? {count_mutan_dna : e.count}: (e.tipodna == 403 ? {count_human_dna : e.count} : ''));
+        var pushar = (e.tipodna == 200 ? {count_mutan_dna : Number(e.count)}: (e.tipodna == 403 ? {count_human_dna : Number(e.count)} : ''));
         response.push(pushar)
     })
-    var ratio = rows[0].count / rows[1].count;
-        response.push({ratio:ratio})
-
+    var ratio = Number(rows[0].count) / Number(rows[1].count);
+    
+    response.push({ratio:ratio})
+    const body = { code: "200", response};
     const res = {
         statusCode: 200,  
         body: JSON.stringify(response)
