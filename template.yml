@@ -47,8 +47,21 @@ Resources:
   # Each Lambda function is defined by properties:
   # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
 
+  # Lambda Function Layer for Node.js
+  LambdaFunctionLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: mutants-dependencies
+      Description: Dependencies for HealthEnviron Lambda Functions.
+      ContentUri: src/dependencies/
+      CompatibleRuntimes:
+        - nodejs12.x
+        - nodejs14.x
+      LicenseInfo: MIT
+      RetentionPolicy: Retain
+
   # This is a Lambda function config associated with the source code: get-all-items.js
-  Authenticate:
+  Mutant:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: src/mutantes
@@ -57,6 +70,33 @@ Resources:
       MemorySize: 128
       Timeout: 60
       Description: This Lambda Function allows to get mutants.
+      Policies:
+        # Give Lambda basic execution Permission to the helloFromLambda
+        - AWSLambdaBasicExecutionRole
+      Layers:
+        - !Ref LambdaFunctionLayer
+      Environment:
+        Variables:
+          USER: !Ref USER
+          PASSWORD: !Ref PASSWORD
+          HOST: !Ref HOST
+          DB: !Ref DB
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /mutant
+            Method: POST
+
+  Stats:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/stats
+      Handler: index.statsHandler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 60
+      Description: This Lambda Function allows to get stats mutants.
       Policies:
         # Give Lambda basic execution Permission to the helloFromLambda
         - AWSLambdaBasicExecutionRole
@@ -70,5 +110,5 @@ Resources:
         Api:
           Type: Api
           Properties:
-            Path: /mutantes
+            Path: /mutant
             Method: POST

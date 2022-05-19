@@ -1,4 +1,4 @@
-
+const query = require('./database')
 const letters = [];
 var matriz = [];
 
@@ -56,17 +56,9 @@ const lettersmap = async () => {
 
 exports.handler = async (event) => {
     // TODO implement
-    try{
-        let connection;
-    // Connects to a connection pool to the MariaDB database.
-    /*if (typeof connection === "undefined") {
-      const dataConnection = {dbName: }
-      connection = await mariadb.createPool(dataConnection);
-    }*/
-        
+    try{        
         let { body } = event;
         body = body ? JSON.parse(body) : null;
-        console.log("body",body,body.dna)
         const dna = body ? body.dna :  null;
             if (dna == "" || dna == null) return {
             statusCode: 404,
@@ -110,11 +102,8 @@ exports.handler = async (event) => {
             }
         })
         matriz = [];
-        const res = {
-            statusCode: countdna > 1 ? 200 : 403,
-            body: countdna > 1 ? JSON.stringify('Mutante') : JSON.stringify('Humano'),
-        };
-        return res;
+        var resdata = (countdna > 1 ? 200 : 403)
+        query.insertDna(dna, resdata);        
     }catch(err){
         const response = {
             statusCode: err.statusCode ? err.statusCode : 500,
